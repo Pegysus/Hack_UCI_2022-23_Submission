@@ -2,10 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { Typography, Button, Grid } from '@mui/material';
-
+import { toast } from 'react-toastify';
+ 
 import TextFieldInput from '../form_components/TextFieldInput/TextFieldInput';
 import TextAreaInput from '../form_components/TextAreaInput/TextAreaInput';
 import './SignupForm.css';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure()
 
 const SignupForm = () => {
 
@@ -15,8 +19,14 @@ const SignupForm = () => {
         axios.get('https://hack-tech-app-endpoint.herokuapp.com/test', {
             params: { ...data }
         }).then(result => {
+            if(result.status === 200) 
+                toast.success("Form Sucessfully Submitted!")
+
             console.log(data);
         }).catch(err => {
+            if(err.response.status === 400 || err.reponse.status === 404) 
+                toast.error("Form was not Submitted, please try again");
+            
             console.log(err);
         })
 
